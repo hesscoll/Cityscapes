@@ -2,10 +2,11 @@ extends Node
 
 export (PackedScene) var Mob
 var score
+onready var spawnLocation = $MobPath/MobSpawnLocation
 
 func _ready():
 	randomize()
-	new_game()
+	
 
 func game_over():
 	$ScoreTimer.stop()
