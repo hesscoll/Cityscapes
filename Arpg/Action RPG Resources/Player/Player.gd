@@ -1,9 +1,9 @@
 extends KinematicBody2D
 
-var MAX_SPEED = 100
-var ACCELERATION = 15
-const FRICTION = 15
-var sprintState = 0
+export var MAX_SPEED = 100
+export var ACCELERATION = 15
+export var FRICTION = 15
+export var sprintState = 0
 
 enum {
 	MOVE,
@@ -12,7 +12,7 @@ enum {
 }
 
 var velocity = Vector2.ZERO
-var roll_vector = Vector2.DOWN
+var roll_vector = Vector2.LEFT
 var state = MOVE
 
 onready var animationPlayer = $AnimationPlayer
@@ -67,9 +67,11 @@ func move_state(delta):
 		MAX_SPEED = 100
 		state = ATTACK
 		
-	if Input.is_action_pressed("Roll") and sprintState == 0:
+	if Input.is_action_just_pressed("Roll") and sprintState == 0:
 		MAX_SPEED = 150
+		sprintState = 1
 		state = ROLL
+	
 
 func attack_state(delta):
 	velocity = Vector2.ZERO
@@ -80,7 +82,8 @@ func roll_state(delta):
 	animationState.travel("Roll")
 	
 func roll_animation_end():
-	MAX_SPEED = 115
+	if Input.is_action_pressed("Roll") and sprintState == 1:
+		MAX_SPEED = 120
 	state = MOVE
 	
 func attack_animation_end():
@@ -89,6 +92,12 @@ func attack_animation_end():
 func move():
 	velocity = move_and_slide(velocity)
 	
+	if Input.is_action_just_released("Roll") and sprintState == 1 and state != ROLL:
+		MAX_SPEED = 100
+		sprintState = 0
+	if !Input.is_action_pressed("Roll") and sprintState == 1 and state != ROLL:
+		MAX_SPEED = 100
+		sprintState = 0
 func _physics_process(delta):
 	move()
 	
