@@ -24,6 +24,10 @@ config/name="Arpg"
 run/main_scene="res://Action RPG Resources/World/World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerStats="*res://Action RPG Resources/Player/PlayerStats.tscn"
+
 [display]
 
 window/size/width=320
